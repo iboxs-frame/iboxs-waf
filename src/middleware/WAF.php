@@ -6,6 +6,7 @@ namespace iboxs\waf\middleware;
 use Closure;
 use iboxs\Config;
 use iboxs\waf\lib\Handle;
+use iboxs\waf\lib\wafLog;
 
 class WAF
 {
@@ -49,14 +50,44 @@ class WAF
         return $next($request);
     }
 
+    private function addLog($r,$request){
+        $config=$this->wafConfig['log']??null;
+        if($config==null){
+            return false;
+        }
+        if(!is_array($config)){
+            return false;
+        }
+        foreach ($config as $class){
+            if(!class_exists($class)){
+                continue;
+            }
+            $class=new $class();
+            $class->wafLogs($request,$r);
+        }
+        return true;
+    }
+
     private function banRequest($r,$request){
+        $this->addLog($r,$request);
         $response=$this->wafConfig['response'][$r]??null;
         if($response==null){
             $tpl=__DIR__."/../tpl/refuse.tpl";
             $code=403;
+            $ajax=[
+                'code'=>-403,
+                'msg'=>'检测到异常行为，已拦截'
+            ];
         } else{
             $tpl=$response['tpl']??(__DIR__."/../tpl/refuse.tpl");
             $code=$response['code']??403;
+            $ajax=$response['ajax']??[
+                'code'=>-403,
+                'msg'=>'检测到异常行为，已拦截'
+            ];
+        }
+        if($request->isAjax()){
+            return response(json($ajax),$code,[],'json',false);
         }
         if(!file_exists($tpl)){
             return response('模板文件不存在',$code,[],'html',false);

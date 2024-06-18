@@ -16,12 +16,14 @@ class PATH{
         '/(attachments|css|uploadfiles|static|forumdata|cache|avatar)\w+\.(php|jsp)/',
         '/\.\./',
         '/\*/',
-        '/(?:etc\/\W*passwd)/',
-        ''
+        '/(?:etc\/\W*passwd)/'
     ];
 
     public function handle(Request $request){
         $url=$request->url();
+        if($url==''){
+            return true;
+        }
         foreach ($this->matchList as $value) {
             if(preg_match($value,$url)){
                 return false;

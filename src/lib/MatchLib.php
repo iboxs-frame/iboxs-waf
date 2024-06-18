@@ -6,7 +6,7 @@ trait MatchLib{
     public function matchCheck($value){
         if(is_array($value)){
             foreach($value as $v){
-                $result=$this->checkAuth($v);
+                $result=$this->matchCheck($v);
                 if($result==false){
                     return false;
                 }

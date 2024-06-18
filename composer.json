@@ -19,5 +19,10 @@
         "psr-4": {
             "iboxs\\waf\\": "src/"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "iboxs\\waf\\WAF::install"
+        ]
     }
 }
