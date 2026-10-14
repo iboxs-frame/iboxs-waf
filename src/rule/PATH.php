@@ -16,7 +16,21 @@ class PATH{
         '/(attachments|css|uploadfiles|static|forumdata|cache|avatar)\w+\.(php|jsp)/',
         '/\.\./',
         '/\*/',
-        '/(?:etc\/\W*passwd)/'
+        '/(?:etc\/\W*passwd)/',
+        '/\/storage\/logs\/(.*).log/',
+        '/.env/',
+        '/application.properties/',
+        '/config.php/',
+        '/\.git(|(\w+))/',
+        '/\.svn(|(\w+))/',
+        '/\.hg(|(\w+))/',
+        '/\.bzr(|(\w+))/',
+        '/\.cvs(|(\w+))/',
+        '/\.idea(|(\w+))/',
+        '/(conf|config|db)\/(.*).(yml|xml|ini|json)/',
+        "/setting.php|config.php|data.php|database.yml|master.key|settings.py/",
+        '/(.*).inc.php/',
+        '/(config)\/(.*).(yml|xml|ini|json|php)/'
     ];
 
     public function handle(Request $request){
